@@ -1,0 +1,193 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "darwin-arm64"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  username  String   @unique
+  firstName String?
+  lastName  String?
+  password  String
+  role      UserRole @default(USER)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  projects      Project[]
+  chatSessions  ChatSession[]
+  calculations  Calculation[]
+
+  @@map("users")
+}
+
+model Project {
+  id          String      @id @default(cuid())
+  name        String
+  description String?
+  location    String?
+  status      ProjectStatus @default(ACTIVE)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Foreign Keys
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relations
+  calculations Calculation[]
+  soilSamples  SoilSample[]
+  reports      Report[]
+
+  @@map("projects")
+}
+
+model SoilSample {
+  id              String   @id @default(cuid())
+  sampleId        String   @unique
+  depth           Float
+  soilType        String
+  moistureContent Float?
+  density         Float?
+  liquidLimit     Float?
+  plasticLimit    Float?
+  plasticityIndex Float?
+  grainSize       Json?    // Store grain size distribution as JSON
+  strength        Json?    // Store strength parameters as JSON
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Foreign Keys
+  projectId   String
+  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // Relations
+  calculations Calculation[]
+
+  @@map("soil_samples")
+}
+
+model Calculation {
+  id            String          @id @default(cuid())
+  type          CalculationType
+  input         Json            // Store calculation inputs as JSON
+  output        Json            // Store calculation results as JSON
+  aiPrompt      String?         // Original AI prompt used
+  aiResponse    String?         // AI response/explanation
+  status        CalculationStatus @default(PENDING)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  // Foreign Keys
+  userId        String
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId     String?
+  project       Project?        @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  soilSampleId  String?
+  soilSample    SoilSample?     @relation(fields: [soilSampleId], references: [id], onDelete: SetNull)
+
+  @@map("calculations")
+}
+
+model Report {
+  id          String     @id @default(cuid())
+  title       String
+  content     String     // Can store HTML or markdown
+  type        ReportType
+  generatedBy String     // 'AI' or 'USER'
+  isPublic    Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Foreign Keys
+  projectId   String
+  project     Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("reports")
+}
+
+model ChatSession {
+  id        String   @id @default(cuid())
+  title     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Foreign Keys
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relations
+  messages  ChatMessage[]
+
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id        String      @id @default(cuid())
+  content   String
+  role      MessageRole
+  createdAt DateTime    @default(now())
+
+  // Foreign Keys
+  sessionId String
+  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("chat_messages")
+}
+
+// Enums
+enum UserRole {
+  USER
+  ADMIN
+  ENGINEER
+}
+
+enum ProjectStatus {
+  ACTIVE
+  COMPLETED
+  ON_HOLD
+  CANCELLED
+}
+
+enum CalculationType {
+  BEARING_CAPACITY
+  SETTLEMENT
+  SLOPE_STABILITY
+  LATERAL_PRESSURE
+  CONSOLIDATION
+  COMPACTION
+  PERMEABILITY
+  SHEAR_STRENGTH
+  CUSTOM
+}
+
+enum CalculationStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum ReportType {
+  SOIL_INVESTIGATION
+  FOUNDATION_DESIGN
+  SLOPE_ANALYSIS
+  GEOTECHNICAL_SUMMARY
+  CUSTOM
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+} 
