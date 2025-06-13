@@ -7,13 +7,15 @@ RUN apk add openssl
 
 # Copy package files
 COPY package*.json ./
-COPY prisma ./prisma/
+
+# Copy source code
+COPY . . 
+
+# Install NestJS CLI
+RUN npm install -g @nestjs/cli
 
 # Install dependencies
 RUN npm ci --only=production
-
-# Copy source code
-COPY . .
 
 # Generate Prisma client
 RUN npx prisma generate
