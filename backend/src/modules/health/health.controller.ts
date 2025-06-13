@@ -11,7 +11,7 @@ export class HealthController {
       status: 'ok',
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
-      message: 'Baba Geotechnical API is running',
+      message: 'Geotech-GEC API is running',
     };
   }
 } 

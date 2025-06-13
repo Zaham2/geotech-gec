@@ -28,7 +28,7 @@ async function bootstrap() {
   const port = configService.get('PORT') || 3001;
   await app.listen(port);
   
-  console.log(`🚀 Baba Geotechnical API is running on: http://localhost:${port}`);
+  console.log(`🚀 Geotech-GEC API is running on: http://localhost:${port}`);
 }
 
 bootstrap(); 

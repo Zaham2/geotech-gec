@@ -1,6 +1,6 @@
-# Baba Geotechnical Frontend
+# Geotech-GEC Frontend
 
-React frontend application for the Baba Geotechnical platform.
+React frontend application for the Geotech-GEC platform.
 
 ## Setup
 

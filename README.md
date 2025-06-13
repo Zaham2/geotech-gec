@@ -1,4 +1,4 @@
-# Baba Geotechnical - AI-Powered Engineering Platform
+# Geotech-GEC - AI-Powered Engineering Platform
 
 A full-stack application for geotechnical engineering with AI agent capabilities powered by OpenAI.
 

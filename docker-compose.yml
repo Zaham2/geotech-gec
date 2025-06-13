@@ -4,10 +4,10 @@ services:
   # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
-    container_name: baba-geotechnical-db
+    container_name: geotech-gec-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: baba_geotechnical
+      POSTGRES_DB: geotech_gec
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
@@ -16,14 +16,14 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./backend/prisma/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - baba-network
+      - geotech-gec-network
 
   # NestJS Backend
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: baba-geotechnical-backend
+    container_name: geotech-gec-backend
     restart: unless-stopped
     environment:
       DATABASE_URL: ${DATABASE_URL}
@@ -39,14 +39,14 @@ services:
       - ./backend:/app
       - /app/node_modules
     networks:
-      - baba-network
+      - geotech-gec-network
 
   # React Frontend
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: baba-geotechnical-frontend
+    container_name: geotech-gec-frontend
     restart: unless-stopped
     environment:
       REACT_APP_API_URL: ${REACT_APP_API_URL}
@@ -58,24 +58,24 @@ services:
       - ./frontend:/app
       - /app/node_modules
     networks:
-      - baba-network
+      - geotech-gec-network
 
   # Redis (for caching and sessions)
   redis:
     image: redis:7-alpine
-    container_name: baba-geotechnical-redis
+    container_name: geotech-gec-redis
     restart: unless-stopped
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
     networks:
-      - baba-network
+      - geotech-gec-network
 
 volumes:
   postgres_data:
   redis_data:
 
 networks:
-  baba-network:
+  geotech-gec-network:
     driver: bridge 

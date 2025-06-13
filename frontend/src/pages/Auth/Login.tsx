@@ -41,18 +41,11 @@ const Login: React.FC = () => {
       <Paper elevation={3} sx={{ p: 4 }}>
         <Box sx={{ textAlign: 'center', mb: 4 }}>
           <Typography variant="h4" component="h1" gutterBottom>
-            Baba Geotechnical
+            Geotech-GEC
           </Typography>
           <Typography variant="body1" color="text.secondary">
             Sign in to access your geotechnical projects
           </Typography>
-          <Box sx={{ mt: 2, p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
-            <Typography variant="body2" color="text.secondary">
-              <strong>Test Credentials:</strong><br />
-              Email: engineer@babatech.com<br />
-              Password: engineer123
-            </Typography>
-          </Box>
         </Box>
 
         <form onSubmit={handleSubmit}>

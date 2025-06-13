@@ -79,7 +79,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div>
       <Toolbar>
         <Typography variant="h6" noWrap component="div">
-          Baba Geotechnical
+          Geotech-GEC
         </Typography>
       </Toolbar>
       <Divider />

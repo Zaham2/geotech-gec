@@ -61,7 +61,7 @@ const Register: React.FC = () => {
       <Paper elevation={3} sx={{ p: 4 }}>
         <Box sx={{ textAlign: 'center', mb: 4 }}>
           <Typography variant="h4" component="h1" gutterBottom>
-            Join Baba Geotechnical
+            Join Geotech-GEC
           </Typography>
           <Typography variant="body1" color="text.secondary">
             Create your account to get started

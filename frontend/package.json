@@ -1,7 +1,7 @@
 {
-  "name": "baba-geotechnical-frontend",
+  "name": "geotech-gec-frontend",
   "version": "1.0.0",
-  "description": "React frontend for Baba Geotechnical platform",
+  "description": "React frontend for Geotech-GEC platform",
   "private": true,
   "type": "module",
   "scripts": {
