@@ -49,7 +49,7 @@ services:
     container_name: geotech-frontend
     restart: unless-stopped
     environment:
-      REACT_APP_API_URL: https://geotech-gec.online/api
+      VITE_API_URL: ${VITE_API_URL}
     ports:
       - "3000:3000"
     depends_on:
