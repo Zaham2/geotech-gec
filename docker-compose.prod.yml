@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # PostgreSQL Database
@@ -24,7 +24,7 @@ services:
     container_name: geotech-backend
     restart: unless-stopped
     environment:
-      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/geotech-db
       JWT_SECRET: ${JWT_SECRET}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       PORT: 3001
@@ -45,7 +45,7 @@ services:
     container_name: geotech-frontend
     restart: unless-stopped
     environment:
-      REACT_APP_API_URL: ${REACT_APP_API_URL}
+      REACT_APP_API_URL: https://geotech-gec.online/api
     depends_on:
       - backend
     volumes:
@@ -82,18 +82,18 @@ services:
     networks:
       - geotech-network
 
-  # Certbot for SSL
-  certbot:
-    image: certbot/certbot
-    container_name: geotech-certbot
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-
 volumes:
   postgres_data:
   redis_data:
 
 networks:
   geotech-network:
-    driver: bridge 
+    driver: bridge
+
+# Certbot for SSL
+x-certbot:
+  image: certbot/certbot
+  container_name: geotech-certbot
+  volumes:
+    - ./certbot/conf:/etc/letsencrypt
+    - ./certbot/www:/var/www/certbot
