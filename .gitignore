@@ -66,3 +66,4 @@ frontend/.eslintcache
 # Temporary files
 tmp/
 temp/ 
+.history
