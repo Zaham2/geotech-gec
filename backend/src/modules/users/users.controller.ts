@@ -7,6 +7,7 @@ import {
   Delete,
   UseGuards,
   Request,
+  Put,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService, UpdateUserDto } from './users.service';
@@ -81,5 +82,12 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
   async remove(@Param('id') id: string) {
     return this.usersService.remove(id);
+  }
+  
+  @Put(':id/deauthorize')
+  @ApiOperation({ summary: 'Deauthorize user by ID (Admin only)' })
+  @ApiResponse({ status: 200, description: 'User deauthorized successfully' })
+  async deauthorize(@Param('id') id: string) {
+    return this.usersService.deauthorizeUser(id);
   }
 }

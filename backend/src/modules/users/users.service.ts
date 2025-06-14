@@ -137,4 +137,11 @@ export class UsersService {
       chatSessions: chatSessionCount,
     };
   }
+
+  async deauthorizeUser(id: string) {
+    return this.prisma.user.update({
+      where: { id },
+      data: { isActive: false },
+    });
+  }
 }

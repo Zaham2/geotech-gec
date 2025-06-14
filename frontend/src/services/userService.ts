@@ -35,5 +35,14 @@ export const userService = {
   async getAllUsers(): Promise<User[]> {
     const response = await api.get<User[]>('/users');
     return response.data;
+  },
+
+  async deauthorizeUser(userId: string): Promise<User> {
+    const response = await api.put(`/users/${userId}/deauthorize`);
+    return response.data;
+  },
+
+  async deleteUser(userId: string): Promise<void> {
+    await api.delete(`/users/${userId}`);
   }
 }; 
