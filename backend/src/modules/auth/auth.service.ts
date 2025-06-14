@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ForbiddenException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../common/database/prisma.service';
 import * as bcrypt from 'bcryptjs';
@@ -41,6 +41,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    if (!user.isActive) {
+      throw new ForbiddenException('Your account is pending approval');
+    }
+
     const payload = { email: user.email, sub: user.id, role: user.role };
     return {
       access_token: this.jwtService.sign(payload),
@@ -62,15 +66,35 @@ export class AuthService {
       data: {
         ...registerDto,
         password: hashedPassword,
+        isActive: false, // New users are inactive by default
+        role: 'USER', // Default role for new users
       },
     });
 
     const { password, ...result } = user;
-    const payload = { email: user.email, sub: user.id, role: user.role };
-
     return {
-      access_token: this.jwtService.sign(payload),
+      message: 'Registration successful. Please wait for admin approval.',
       user: result,
     };
+  }
+
+  async approveUser(userId: string, adminId: string) {
+    // Verify admin
+    const admin = await this.prisma.user.findUnique({
+      where: { id: adminId },
+    });
+
+    if (!admin || admin.role !== 'ADMIN') {
+      throw new ForbiddenException('Only admins can approve users');
+    }
+
+    // Activate user
+    const user = await this.prisma.user.update({
+      where: { id: userId },
+      data: { isActive: true },
+    });
+
+    const { password, ...result } = user;
+    return result;
   }
 } 
