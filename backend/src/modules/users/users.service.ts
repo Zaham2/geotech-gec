@@ -63,6 +63,19 @@ export class UsersService {
     return user;
   }
 
+  async getPendingUsers(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+    return this.prisma.user.findMany({
+      where: { role: UserRole.USER, isActive: false },
+    });
+  }
+
   async findByEmail(email: string): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: { email },

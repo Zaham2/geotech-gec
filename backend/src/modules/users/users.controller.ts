@@ -19,6 +19,13 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Get('pending')
+  @ApiOperation({ summary: 'Get pending users (Admin only)' })
+  @ApiResponse({ status: 200, description: 'Pending users retrieved successfully' })
+  async getPendingUsers(@Request() req) {
+    return this.usersService.getPendingUsers(req.user.id);
+  }
+
   @Get('profile')
   @ApiOperation({ summary: 'Get current user profile' })
   @ApiResponse({ status: 200, description: 'User profile retrieved successfully' })

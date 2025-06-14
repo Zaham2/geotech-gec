@@ -21,4 +21,19 @@ export const userService = {
     const response = await api.patch<User>('/users/profile', userData);
     return response.data;
   },
+
+  async getPendingUsers(): Promise<User[]> {
+    const response = await api.get<User[]>('/users/pending');
+    return response.data;
+  },
+
+  async approveUser(userId: string): Promise<User> {
+    const response = await api.post<User>(`/auth/approve/${userId}`);
+    return response.data;
+  },
+
+  async getAllUsers(): Promise<User[]> {
+    const response = await api.get<User[]>('/users');
+    return response.data;
+  }
 }; 

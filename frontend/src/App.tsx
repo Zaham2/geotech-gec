@@ -9,7 +9,9 @@ import Chat from '@/pages/Chat/Chat';
 import Reports from '@/pages/Reports/Reports';
 import Login from '@/pages/Auth/Login';
 import Register from '@/pages/Auth/Register';
+import UserManagement from '@/pages/Admin/UserManagement';
 import ProtectedRoute from '@/components/ProtectedRoute/ProtectedRoute';
+import AdminRoute from '@/components/ProtectedRoute/AdminRoute';
 
 function App() {
   return (
@@ -32,6 +34,14 @@ function App() {
                   <Route path="/calculations" element={<Calculations />} />
                   <Route path="/chat" element={<Chat />} />
                   <Route path="/reports" element={<Reports />} />
+                  <Route
+                    path="/admin/users"
+                    element={
+                      <AdminRoute>
+                        <UserManagement />
+                      </AdminRoute>
+                    }
+                  />
                 </Routes>
               </Layout>
             </ProtectedRoute>

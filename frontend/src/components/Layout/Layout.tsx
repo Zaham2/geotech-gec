@@ -27,6 +27,7 @@ import {
   Settings,
   AccountCircle,
   Logout,
+  People,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { authService } from '@/services/authService';
@@ -95,6 +96,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </ListItemButton>
           </ListItem>
         ))}
+        {user?.role === 'ADMIN' && (
+          <ListItem disablePadding>
+            <ListItemButton
+              selected={location.pathname === '/admin/users'}
+              onClick={() => navigate('/admin/users')}
+            >
+              <ListItemIcon><People /></ListItemIcon>
+              <ListItemText primary="User Management" />
+            </ListItemButton>
+          </ListItem>
+        )}
       </List>
     </div>
   );
@@ -211,9 +223,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
+          mt: '64px',
         }}
       >
-        <Toolbar />
         {children}
       </Box>
     </Box>
