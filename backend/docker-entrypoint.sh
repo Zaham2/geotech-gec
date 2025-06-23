@@ -4,7 +4,7 @@ set -e
 
 # Set default values for database connection
 POSTGRES_HOST=${POSTGRES_HOST:-"postgres"}
-POSTGRES_PORT=${POSTGRES_PORT:-"5434"}
+POSTGRES_PORT=${POSTGRES_PORT:-"5432"}
 
 echo "🕓 Waiting for PostgreSQL to be ready at $POSTGRES_HOST:$POSTGRES_PORT..."
 

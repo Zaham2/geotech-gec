@@ -20,7 +20,7 @@ async function bootstrap() {
   app.enableCors({
     origin: process.env.NODE_ENV === 'production' 
       ? configService.get('CORS_ORIGIN') 
-      : ['http://localhost:3000', 'http://127.0.0.1:3000'],
+      : ['http://localhost:5174', 'http://127.0.0.1:5174', 'http://localhost:3000', 'http://127.0.0.1:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -29,7 +29,7 @@ async function bootstrap() {
   // Global API prefix
   app.setGlobalPrefix('api');
 
-  const port = configService.get('BACKEND_PORT') || 3001;
+  const port = 3001;
   await app.listen(port);
   
   console.log(`🚀 Geotech-GEC API is running on: http://localhost:${port}`);
