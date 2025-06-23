@@ -77,3 +77,8 @@ backend/prisma/migrations/
 
 # React
 frontend/.eslintcache
+
+add-domain.sh
+sites-enabled
+
+backend/prisma/init
