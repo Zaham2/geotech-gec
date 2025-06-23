@@ -7,16 +7,17 @@ services:
     container_name: geotech-gec-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: geotech_gec
+      POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./backend/prisma/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - geotech-gec-network
+      - shared-network
 
   # NestJS Backend
   backend:
@@ -26,20 +27,23 @@ services:
     container_name: geotech-gec-backend
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/geotech_gec
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
       JWT_SECRET: ${JWT_SECRET}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
-      PORT: 3001
-      NODE_ENV: production
+      BACKEND_PORT: ${BACKEND_PORT:-3001}
+      NODE_ENV: ${NODE_ENV:-development}
     ports:
-      - "3001:3001"
+      - "3004:3001"
     depends_on:
       - postgres
     volumes:
-      - ./backend:/app
-      - /app/node_modules
+      - ./backend:/app/backend
+      - /app/backend/node_modules
     networks:
       - geotech-gec-network
+      - shared-network
 
   # React Frontend
   frontend:
@@ -49,33 +53,23 @@ services:
     container_name: geotech-gec-frontend
     restart: unless-stopped
     environment:
-      VITE_API_URL: http://localhost:3001
+      VITE_API_URL: http://localhost:3004
     ports:
-      - "3000:3000"
+      - "3005:3000"
     depends_on:
       - backend
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    networks:
-      - geotech-gec-network
-
-  # Redis (for caching and sessions)
-  redis:
-    image: redis:7-alpine
-    container_name: geotech-gec-redis
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
     networks:
       - geotech-gec-network
 
 volumes:
   postgres_data:
-  redis_data:
 
 networks:
   geotech-gec-network:
     driver: bridge 
+  shared-network:
+    driver: bridge
+    external: true

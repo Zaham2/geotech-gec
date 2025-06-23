@@ -29,7 +29,7 @@ async function bootstrap() {
   // Global API prefix
   app.setGlobalPrefix('api');
 
-  const port = configService.get('PORT') || 3001;
+  const port = configService.get('BACKEND_PORT') || 3001;
   await app.listen(port);
   
   console.log(`🚀 Geotech-GEC API is running on: http://localhost:${port}`);

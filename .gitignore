@@ -9,6 +9,7 @@ node_modules/
 .env.test
 .env.production
 .env.prod
+.env.dev
 
 # Build outputs
 dist/
@@ -67,3 +68,12 @@ frontend/.eslintcache
 tmp/
 temp/ 
 .history
+
+./docker-compose.prod.yml
+./nginx.conf
+
+# Prisma
+backend/prisma/migrations/
+
+# React
+frontend/.eslintcache
